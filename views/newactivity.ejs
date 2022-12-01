@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>New Activity</title>
+</head>
+<body>
+  <h1>New Activity</h1>
+  <form action="" method="post" enctype="multipart/form-data">
+
+    <label for="activity-type">Activity type: </label>
+    <select name="activity-type" id="activity-type">
+      <% activitytypes.forEach(type => { %>
+        <option value="<%=type.slug%>"><%=type.activityTypeName%></option>
+      <% }) %>
+    </select><br>
+
+    <label for="activity-name">Activity Name: </label>
+    <input type="text" name="activity-name" id="activity-name"><br>
+
+    <label for="activity-desc">Activity Description: </label><br>
+    <textarea name="activity-desc" id="activity-desc" cols="30" rows="7"></textarea><br>
+
+    <label for="itenerary">Itenerary: </label><br>
+    <textarea name="itenerary" id="itenerary" cols="30" rows="7"></textarea><br>
+    
+    <label for="">Services Included: </label><br>
+    <% services.forEach(service => { %>
+     <input type="checkbox" value="<%= service.slug %>" name="services-included" id="<%= service.slug %>">
+     <label for="<%= service.slug %>"><%= service.serviceName %> </label><br>
+    <% }) %>
+
+    <label for="price">Price: </label>
+    <input type="number" name="price" id="price"><br>
+    
+    <label for="duration">Duration: </label>
+    <input type="text" name="duration" id="duration"><br>
+    
+    <label for="images">Images: </label>
+    <input type="file" name="images" id="images" multilpe >
+
+    <button>add activity</button>
+    
+  </form>
+  
+</body>
+</html>
