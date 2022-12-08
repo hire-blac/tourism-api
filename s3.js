@@ -37,6 +37,7 @@ const downloadFile = fileKey => {
   return s3.getObject(downloadParams).createReadStream()
 }
 
+// export modules
 module.exports = {
   uploadFile, downloadFile
 }
