@@ -56,5 +56,5 @@ app.use(serviceRoutes);
 // });
 
 app.use((req, res)=>{
-  res.status(StatusCodes.NOT_FOUND).json({error: "Not Found"});
+  res.status(StatusCodes.NOT_FOUND).json({error: "Page Not Found"});
 })
