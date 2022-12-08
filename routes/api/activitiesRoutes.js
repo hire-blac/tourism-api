@@ -10,21 +10,21 @@ const router = Router();
 // routes
 
 // get all the types of activities
-router.get('/api/activity-types', activitiesController.activity_types_get_all);
+router.get('/activity-types', activitiesController.activity_types_get_all);
 
 // add a new type of activity
-router.get('/api/activity-types/new', activitiesController.new_activity_type);
-router.post('/api/activity-types/new', activitiesController.activity_type_post);
+router.get('/activity-types/new', activitiesController.new_activity_type);
+router.post('/activity-types/new', activitiesController.activity_type_post);
 
 // get a single type of activity
-router.get('/api/activity-types/:activitytypeslug', activitiesController.activity_type_get);
+router.get('/activity-types/:activitytypeslug', activitiesController.activity_type_get);
 
 // add a new single activity
-router.get('/api/activities/new', activitiesController.new_single_activity);
-router.post('/api/activities/new', upload.single('image'), activitiesController.single_activity_post);
+router.get('/activities/new', activitiesController.new_single_activity);
+router.post('/activities/new', upload.single('image'), activitiesController.single_activity_post);
 
 // get a single activity
-router.get('/api/activities/:activityslug', activitiesController.single_activity_get);
+router.get('/activities/:activityslug', activitiesController.single_activity_get);
 
 // export router object
 module.exports = router;
