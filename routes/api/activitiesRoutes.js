@@ -2,7 +2,7 @@ const {Router} = require('express');
 const activitiesController = require('../../controllers/activitiesControllers');
 const multer  = require('multer');
 
-const upload = multer({ dest: 'public/uploads/' });
+const upload = multer({ dest: 'uploads/' });
 
 // create router object
 const router = Router();
@@ -21,7 +21,7 @@ router.get('/activity-types/:activitytypeslug', activitiesController.activity_ty
 
 // add a new single activity
 router.get('/activities/new', activitiesController.new_single_activity);
-router.post('/activities/new', upload.single('image'), activitiesController.single_activity_post);
+router.post('/activities/new', upload.array('images', 5), activitiesController.single_activity_post);
 
 // get a single activity
 router.get('/activities/:activityslug', activitiesController.single_activity_get);

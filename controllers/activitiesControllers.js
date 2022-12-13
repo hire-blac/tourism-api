@@ -2,23 +2,49 @@ const ActivityType = require('../models/activityType');
 const Activity = require('../models/activity');
 const {StatusCodes} = require('http-status-codes');
 const Service = require('../models/services');
-const { uploadFile, downloadFile } = require('../s3');
+const { uploadFile } = require('../s3');
+const fs = require('fs');
+const util = require('util')
+const unlinkFile = util.promisify(fs.unlink) 
 
+// function to handle files upload
+const handleFiles = async files => {
+  let imageUrls = [];
+  
+  // loop over files
+  for (const file of files) {
+    const result = await uploadFile(file);
+    imageUrls.push(result.Location)
+    await unlinkFile(file.path);
+  }
 
+  return imageUrls;
+}
+
+// function to get list of services from db
 const getServices = async (serviceList) => {
   const objectList = [];
-
-  for (let serv of serviceList) {
-    const service = await Service.findOne({slug: serv})
-    objectList.push(service)
+  if (Array.isArray(serviceList)) {
+    for (let serv of serviceList) {
+      const service = await Service.findOne({slug: serv})
+      if (service) {
+        objectList.push(service)
+      }
+    }
+  } else {
+    const service = await Service.findOne({slug: serviceList});
+    if (service) {
+      objectList.push(service)
+    }
   }
+  
   return objectList;
 }
 
 // get all activity types
 module.exports.activity_types_get_all = async (req, res) => {
   const activityTypes = await ActivityType.find();
-  res.status(StatusCodes.OK).json(activityTypes)
+  res.status(StatusCodes.OK).json({activityTypes})
 }
 
 // get single activity type
@@ -29,10 +55,10 @@ module.exports.activity_type_get = async (req, res) => {
   res.status(StatusCodes.OK).json(activityType);
 }
 
+
 module.exports.new_activity_type = (req, res) => {
   res.render('newactivitytype')
 }
-
 
 // add an activity type to database
 module.exports.activity_type_post = async (req, res) => {
@@ -68,9 +94,8 @@ module.exports.new_single_activity = async (req, res) => {
 // add an activity to database
 module.exports.single_activity_post = async (req, res) => {
 
-  const file = req.file;
-  const fileUpload = await uploadFile(file);
-  const image = fileUpload.path;
+  const files = req.files;
+  const images = await handleFiles(files);
 
   const activityType = await ActivityType.findOne({slug: req.body['activity-type']});
   
@@ -91,6 +116,7 @@ module.exports.single_activity_post = async (req, res) => {
       itenerary,
       price,
       duration,
+      images
     });
 
     // add activity tp type list
