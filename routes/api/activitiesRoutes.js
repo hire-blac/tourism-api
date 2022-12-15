@@ -14,7 +14,7 @@ router.get('/activity-types', activitiesController.activity_types_get_all);
 
 // add a new type of activity
 router.get('/activity-types/new', activitiesController.new_activity_type);
-router.post('/activity-types/new', activitiesController.activity_type_post);
+router.post('/activity-types/new', upload.single('image'), activitiesController.activity_type_post);
 
 // get a single type of activity
 router.get('/activity-types/:activitytypeslug', activitiesController.activity_type_get);

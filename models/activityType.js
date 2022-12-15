@@ -10,6 +10,9 @@ const activityTypeSchema = new Schema({
   activityTypeName: {
     type: String,
   },
+  image: {
+    type: String,
+  },
   slug: {
     type: String,
     unique: true,
