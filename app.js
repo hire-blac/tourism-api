@@ -9,7 +9,8 @@ const serviceRoutes = require('./routes/api/servicesRoutes');
 
 // .env variables
 const API_PORT = 4000
-const port = process.env.PORT || API_PORT;
+// const port = process.env.PORT || API_PORT;
+const port = 3000;
 const MONGO_URI = process.env.MONGO_URI || 'mongodb+srv://new-danihire:ruby5311@testingcluster.1iwpg.mongodb.net/tourism-api?retryWrites=true&w=majority';
 
 // create express app
