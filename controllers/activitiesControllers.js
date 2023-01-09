@@ -62,7 +62,8 @@ module.exports.new_activity_type = (req, res) => {
 
 // add an activity type to database
 module.exports.activity_type_post = async (req, res) => {
-  const file = req.files;
+  
+  const file = req.file;
   const activityTypeName = req.body['activity-type-name']
 
   const result = await uploadFile(file);
