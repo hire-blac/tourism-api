@@ -11,13 +11,13 @@ const serviceRoutes = require('./routes/api/servicesRoutes');
 const API_PORT = 4000
 const port = process.env.PORT || API_PORT;
 
-const MONGO_URI = process.env.MONGO_URI
+const DB_URI = process.env.DB_URI
 
 // create express app
 const app = express();
 
 // connect to mongodb
-mongoose.connect(MONGO_URI)
+mongoose.connect(DB_URI)
 .then(res=> {
   console.log('Connected to database...');
   // listen for requests once database data has loaded
