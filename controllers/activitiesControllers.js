@@ -2,10 +2,6 @@ const ActivityType = require('../models/activityType');
 const Activity = require('../models/activity');
 const {StatusCodes} = require('http-status-codes');
 const Service = require('../models/services');
-const { uploadFile } = require('../s3');
-const fs = require('fs');
-const util = require('util')
-const unlinkFile = util.promisify(fs.unlink) 
 
 // function to handle files upload
 const handleFiles = async files => {
