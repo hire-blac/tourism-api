@@ -13,9 +13,7 @@ const handleFiles = async files => {
   
   // loop over files
   for (const file of files) {
-    const result = await uploadFile(file);
-    imageUrls.push(result.Location)
-    await unlinkFile(file.path);
+    imageUrls.push(file.path.slice(6)); // remove 'public' from image path
   }
 
   return imageUrls;
@@ -66,9 +64,7 @@ module.exports.activity_type_post = async (req, res) => {
   const file = req.file;
   const activityTypeName = req.body['activity-type-name']
 
-  const result = await uploadFile(file);
-  const image = result.Location;
-  await unlinkFile(file.path);
+  const image = file.path.slice(6); // remove 'public' from image path
 
   try {
     const activitytype = await ActivityType.create({

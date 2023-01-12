@@ -2,7 +2,7 @@ const {Router} = require('express');
 const activitiesController = require('../../controllers/activitiesControllers');
 const multer  = require('multer');
 
-const upload = multer({ dest: 'uploads/' });
+const upload = multer({ dest: 'public/uploads/' });
 
 // create router object
 const router = Router();
