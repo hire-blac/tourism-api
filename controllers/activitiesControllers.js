@@ -4,12 +4,12 @@ const {StatusCodes} = require('http-status-codes');
 const Service = require('../models/services');
 
 // function to handle files upload
-const handleFiles = async files => {
+const handleFiles = async (host, files) => {
   let imageUrls = [];
   
   // loop over files
   for (const file of files) {
-    imageUrls.push(file.path.slice(6)); // remove 'public' from image path
+    imageUrls.push(host + file.path.slice(6));
   }
 
   return imageUrls;
@@ -96,8 +96,9 @@ module.exports.new_single_activity = async (req, res) => {
 // add an activity to database
 module.exports.single_activity_post = async (req, res) => {
 
+  const host = req.headers.host;
   const files = req.files;
-  const images = await handleFiles(files);
+  const images = await handleFiles(host, files);
 
   const activityType = await ActivityType.findOne({slug: req.body['activity-type']});
   
