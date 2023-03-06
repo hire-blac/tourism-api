@@ -15,8 +15,10 @@ module.exports.new_service_get = async (req, res) => {
 }
 
 module.exports.new_service = async (req, res) => {
-  const serviceName = req.body['service-name']
-  const service = await Service.create({serviceName});
+  const serviceName = req.body['service-name'];
+  const duration = req.body['duration'];
+
+  const service = await Service.create({serviceName, duration});
   res.json(service);
 }
 

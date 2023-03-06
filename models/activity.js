@@ -33,11 +33,7 @@ const activitySchema = new Schema({
   price: {
     type: Number,
     required: true,
-  },
-  duration: {
-    type: Number,
-    required: true,
-  },
+  }
 }, {timestamps: true});
 
 const Activity = mongoose.model('activity', activitySchema);

@@ -107,7 +107,6 @@ module.exports.single_activity_post = async (req, res) => {
   const services = req.body['services-included'];
   const itenerary = req.body['itenerary'];
   const price = req.body['price'];
-  const duration = req.body['duration'];
 
   const servicesIncluded = await getServices(services);
 
@@ -118,7 +117,6 @@ module.exports.single_activity_post = async (req, res) => {
       servicesIncluded,
       itenerary,
       price,
-      duration,
       images
     });
 

@@ -9,6 +9,9 @@ const serviceSchema =new Schema({
     type: String,
     required: true
   },
+  description: {
+    type: String
+  },
   slug: {
     type: String,
     unique: true,
