@@ -60,7 +60,7 @@ module.exports.activity_type_post = async (req, res) => {
   const file = req.file;
   const activityTypeName = req.body['activity-type-name']
 
-  const image = file.path.slice(6); // remove 'public' from image path
+  const image = req.headers.host + file.path.slice(6); // remove 'public' from image path
 
   try {
     const activitytype = await ActivityType.create({
