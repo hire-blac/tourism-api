@@ -4,12 +4,12 @@ const {StatusCodes} = require('http-status-codes');
 const Service = require('../models/services');
 
 // function to handle files upload
-const handleFiles = async (host, files) => {
+const handleFiles = async (origin, files) => {
   let imageUrls = [];
   
   // loop over files
   for (const file of files) {
-    imageUrls.push(host + file.path.slice(6));
+    imageUrls.push(origin + file.path.slice(6));
   }
 
   return imageUrls;
@@ -60,7 +60,7 @@ module.exports.activity_type_post = async (req, res) => {
   const file = req.file;
   const activityTypeName = req.body['activity-type-name']
 
-  const image = req.headers.host + file.path.slice(6); // remove 'public' from image path
+  const image = req.headers.origin + file.path.slice(6); // remove 'public' from image path
 
   try {
     const activitytype = await ActivityType.create({
@@ -96,9 +96,9 @@ module.exports.new_single_activity = async (req, res) => {
 // add an activity to database
 module.exports.single_activity_post = async (req, res) => {
 
-  const host = req.headers.host;
+  const origin = req.headers.origin;
   const files = req.files;
-  const images = await handleFiles(host, files);
+  const images = await handleFiles(origin, files);
 
   const activityType = await ActivityType.findOne({slug: req.body['activity-type']});
   
