@@ -23,13 +23,13 @@ const activitySchema = new Schema({
     type: String,
     required: true,
   },
-  servicesIncluded: [{
+  services: [{
     type: mongoose.Types.ObjectId,
     ref: Service
   }],
-  itenerary: {
+  itenerary: [{
     type: String
-  },
+  }],
   price: {
     type: Number,
     required: true,

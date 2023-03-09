@@ -80,7 +80,7 @@ module.exports.activity_type_post = async (req, res) => {
 // get single activity
 module.exports.single_activity_get = async (req, res) => {
   // get all the activities of a type
-  const activity = await Activity.findOne({slug: req.params.activityslug}).populate('servicesIncluded');
+  const activity = await Activity.findOne({slug: req.params.activityslug}).populate('services');
 
   res.status(StatusCodes.OK).json(activity);
 }
@@ -104,22 +104,27 @@ module.exports.single_activity_post = async (req, res) => {
   
   const activityName = req.body['activity-name'];
   const description = req.body['activity-desc'];
-  const services = req.body['services-included'];
-  const itenerary = req.body['itenerary'];
+  const servicesIncluded = req.body['services-included'];
+  const itenerary = req.body['itenerary'].split(", ");
   const price = req.body['price'];
 
-  const servicesIncluded = await getServices(services);
+  const services = await getServices(servicesIncluded);
 
   try {
     const activity = await Activity.create({
       activityName,
       description,
-      servicesIncluded,
       itenerary,
       price,
       images
     });
-
+    
+    // add services to activity
+    services.forEach(service => {
+      activity.services.push(service);
+    })
+    
+    activity.save()
     // add activity tp type list
     activityType.activities.push(activity);
     activityType.save();
