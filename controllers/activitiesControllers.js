@@ -37,6 +37,10 @@ const getServices = async (serviceList) => {
 
 // get all activity types
 module.exports.activity_types_get_all = async (req, res) => {
+  ActivityType.find()
+  .then(activityTypes => res.status(StatusCodes.OK).json({activityTypes}))
+  .catch(err => res.status(StatusCodes.NO_CONTENT).json(err));
+
   const activityTypes = await ActivityType.find();
   res.status(StatusCodes.OK).json({activityTypes})
 }

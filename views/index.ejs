@@ -36,6 +36,62 @@
             of the activity
           </p>
         </tr>
+        <tr>
+          <p>
+            <b>METHOD: </b> POST <br>
+            <b>Endpoint: </b> <a href="/bookings/new">/bookings/new</a> <br>
+            <b>Description: </b> Create a new Booking<br>
+            <b>Requirements: </b> firstname, lastname, email, country, numOfAdults, numOfChildren, activityslug, amountPaid, date<br>
+          </p>
+        </tr>
+        <tr>
+          <p>
+            <b>METHOD: </b> POST <br>
+            <b>Endpoint: </b> <a href="/admin/register">/admin/register</a> <br>
+            <b>Description: </b> Register a new admin user<br>
+            <b>Requirements: </b> firstname, lastname, email, password<br>
+          </p>
+        </tr>
+        <tr>
+          <p>
+            <b>METHOD: </b> POST <br>
+            <b>Endpoint: </b> <a href="/admin/login">/admin/login</a> <br>
+            <b>Description: </b> Admin user login<br>
+            <b>Requirements: </b> email, password<br>
+          </p>
+        </tr>
+        <tr>
+          <p>
+            <b>METHOD: </b> GET <br>
+            <b>Endpoint: </b> <a href="/admin/bookings">/admin/bookings</a> <br>
+            <b>Description: </b> show list of all bookings made<br>
+            <b>Requirements: </b> admin must be logged in (authorization Bearer header required)<br>
+          </p>
+        </tr>
+        <tr>
+          <p>
+            <b>METHOD: </b> GET <br>
+            <b>Endpoint: </b> <a href="/admin/bookings/12">/admin/bookings/:[booking_id]</a> <br>
+            <b>Description: </b> show details of a single booking<br>
+            <b>Requirements: </b> admin must be logged in (authorization Bearer header required)<br>
+          </p>
+        </tr>
+        <tr>
+          <p>
+            <b>METHOD: </b> GET <br>
+            <b>Endpoint: </b> <a href="/admin/users">/admin/users</a> <br>
+            <b>Description: </b> show all customers stored in database<br>
+            <b>Requirements: </b> admin must be logged in (authorization Bearer header required)<br>
+          </p>
+        </tr>
+        <tr>
+          <p>
+            <b>METHOD: </b> GET <br>
+            <b>Endpoint: </b> <a href="/admin/users/12">/admin/users/:[user._id]</a> <br>
+            <b>Description: </b> show details of a single user<br>
+            <b>Requirements: </b> admin must be logged in (authorization Bearer header required)<br>
+          </p>
+        </tr>
       </tbody>
     </table>
 

@@ -1,5 +1,6 @@
 const {Router} = require('express');
 const activitiesController = require('../../controllers/activitiesControllers');
+const requireAuth = require('../../middlewares/requireAuth');
 const multer  = require('multer');
 
 const upload = multer({ dest: 'public/uploads/' });

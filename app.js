@@ -4,7 +4,9 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const {StatusCodes} = require('http-status-codes');
 const activitiesRoutes = require('./routes/api/activitiesRoutes');
+const adminRoutes = require('./routes/api/adminRoutes');
 const serviceRoutes = require('./routes/api/servicesRoutes');
+const bookingRoutes = require('./routes/api/bookingRoutes');
 
 
 // .env variables
@@ -35,8 +37,8 @@ app.set('view engine', 'ejs');
 
 // middleware
 app.use(cors());
-app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
 app.options('*', cors()) // include before other routes
@@ -46,9 +48,13 @@ app.get('/', (req, res) => {
   res.render('index');
 })
 
+// admin auth routes
+app.use('/admin', adminRoutes);
+
 // api routes
 app.use(activitiesRoutes);
 app.use(serviceRoutes);
+app.use(bookingRoutes);
 
 // error handling middleware
 // app.use((req, res, next) => {
