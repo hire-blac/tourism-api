@@ -50,28 +50,31 @@ module.exports.createBooking = async (req, res)=>{
     const activity = await Activity.findOne({slug: activityslug});
 
     // save booking
-    const booking = await Booking.create({
+    Booking.create({
       user,
       activity,
       numOfAdults,
       numOfChildren,
       amountPaid,
       date
-    })
+    }).then(booking => {
 
-    let message = `New Booking \n********************\nClient: ${user.firstname} ${user.lastname}\nActivity: ${activity.activityName}\nNum. of Adults: ${booking.numOfAdults}\nNum. of Children: ${booking.numOfChildren}\nDate: ${booking.date}`;
-
-    // send email
-    let data = getTextMessageInput(process.env.RECIPIENT_WAID, message);
-    
-    sendMessage(data)
-    .then()
-    .catch(function (error) {
-      console.log(error);
-      console.log(error.response.data);
+      let message = `New Booking \n********************\nClient: ${user.firstname} ${user.lastname}\nActivity: ${activity.activityName}\nNum. of Adults: ${booking.numOfAdults}\nNum. of Children: ${booking.numOfChildren}\nDate: ${booking.date}`;
+      // send email
+      let data = getTextMessageInput(process.env.RECIPIENT_WAID, message);
+      
+      sendMessage(data)
+      .then()
+      .catch(err=>{
+        console.log(err);
+        console.log(err.response.data);
+      });
+  
+      res.json({booking});
+  
+    }).catch (err=>{
+      res.json(err)
     });
-
-    res.json({booking});
 
   } catch (error) {
     res.json(error)
