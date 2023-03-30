@@ -35,13 +35,29 @@ mongoose.connect(DB_URI)
 // register view engine
 app.set('view engine', 'ejs');
 
+let whitelist = [
+  'http://127.0.0.1:5173', 
+  'http://127.0.0.1:5174', 
+  'https://arabianlens.com'
+]
+
+let corsOptions = {
+  origin: function (origin, callback) {
+    if (whitelist.indexOf(origin) !== -1) {
+      callback(null, true)
+    } else {
+      callback(new Error('Not allowed by CORS'))
+    }
+  }
+}
+
 // middleware
-app.use(cors());
+app.use(cors(corsOptions));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(express.static('public'));
 
-app.options('*', cors()) // include before other routes
+// app.options('*', cors()) // include before other routes
 
 // unauthorized routes
 app.get('/', (req, res) => {
