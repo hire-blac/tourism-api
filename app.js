@@ -38,7 +38,8 @@ app.set('view engine', 'ejs');
 let whitelist = [
   'http://127.0.0.1:5173', 
   'http://127.0.0.1:5174', 
-  'http://localhost:4000', 
+  'http://localhost:4000',
+  'https://arabiens.pages.dev',
   'https://arabianlens.com',
   'https://api.arabianlens.com'
 ]
