@@ -12,10 +12,10 @@ const googleLogin = async (credential) => {
     user = await User.create({
       firstname: decodedUser.given_name,
       lastname: decodedUser.family_name,
-      email_verified: decodedUser.email_verified
+      email: decodedUser.email
     });
   }
-  user.email = decodedUser.email;
+  user.email_verified = decodedUser.email_verified;
   return user;
 }
 
