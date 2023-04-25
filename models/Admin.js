@@ -26,8 +26,8 @@ const adminSchema = new Schema({
 });
 
 // hash password before saving user object
-adminSchema.pre('save', async (next)=>{
-  if (this.created) {
+adminSchema.pre('save', async function(next){
+  if (!this.created) {
     const salt = await bcrypt.genSalt();
     this.password = await bcrypt.hash(this.password, salt);
   }
@@ -35,18 +35,32 @@ adminSchema.pre('save', async (next)=>{
 });
 
 // static method to login user
-adminSchema.statics.login = async (email, password)=>{
+adminSchema.statics.login = async function(email, password) {
   const adminUser = await this.findOne({email});
   if(adminUser) {
-    const auth = await bcrypt.compare(password, adminUser.password);
+    const auth = bcrypt.compare(password, adminUser.password);
     if(auth){
       return adminUser;
     }
-    throw Error('Invalid login credentials');
+    throw new Error('Invalid login credentials');
   }
-  throw Error('Invalid login credentials');
+  throw new Error('Invalid login credentials');
 }
 
-const Admin = mongoose.model('Admin', adminSchema);
+// static method to login user
+// adminSchema.statics.login = async function(email, password){
+//   const adminUser = await this.findOne({email});
+  
+//   if(adminUser) {
+//     const auth = await bcrypt.compare(password, adminUser.password);
+//     if(auth){
+//       return adminUser;
+//     }
+//     throw Error('Invalid Password');
+//   }
+//   throw Error('Invalid email');
+// }
+
+const Admin = mongoose.model('admin', adminSchema);
 
 module.exports = Admin;

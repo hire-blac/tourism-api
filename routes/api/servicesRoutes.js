@@ -9,10 +9,6 @@ const router = Router();
 // get all the services
 router.get('/services', servicesController.all_services_get);
 
-// add a new service
-router.get('/services/new', servicesController.new_service_get);
-router.post('/services/new', servicesController.new_service);
-
 // get a single service
 router.get('/services/:serviceslug', servicesController.service_get);
 

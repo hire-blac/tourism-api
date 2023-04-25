@@ -1,0 +1,36 @@
+<%- include('./partials/head.ejs') %>
+
+  <div class="container">
+    
+    <div class="new-service">
+      <h4>New Service</h4>
+      <form action="" method="post">
+        
+        <label for="service-name">Service name</label>
+        <input type="text" name="service-name" id="service-name">
+        
+        <label for="description">Description</label>
+        <input type="text" name="description" id="description">
+    
+        <button>add service</button>
+      </form>
+    </div>
+
+    <div class="services">
+      <table>
+        <th>Service name</th>
+        <th>Service description</th>
+      
+        <% services.forEach(service => { %>
+        <tr class="service">
+          <td><%= service.serviceName %></td>
+          <td><%= service.description %></td>
+        </tr>
+        <% }) %>
+      </table>
+
+    </div>
+
+  </div>
+</body>
+</html>

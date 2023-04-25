@@ -1,7 +1,8 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
+const Admin = require('../models/Admin');
 
-const apiTokenKey = process.env.API_TOKEN_KEY;
+const tokenKey = process.env.API_TOKEN_KEY;
 
 const verifyToken = (req, res, next) => {
   
@@ -24,4 +25,53 @@ const verifyToken = (req, res, next) => {
   }
 }
 
-module.exports = verifyToken;
+const requireAdmin = (req, res, next) => {
+  const token = req.cookies.jwt;
+
+  // check if jwt exists and verify
+  if(token) {
+    jwt.verify(token, tokenKey, (err, decodedToken) => {
+      if(err) {
+        console.log(err.message);
+        res.redirect('/admin/login');
+      }
+      else {
+        next();
+      }
+    })
+  }
+  else {
+    res.redirect('/admin/login');
+  }
+}
+
+// check current user
+const checkAdmin = (req, res, next) => {
+  const token = req.cookies.jwt;
+
+  // check if jwt exists and verify
+  if(token) {
+    jwt.verify(token, tokenKey, async (err, decodedToken) => {
+      if(err) {
+        console.log(err.message);
+        res.locals.admin = null;
+        next();
+      }
+      else {
+        const admin = await Admin.findById(decodedToken.id);
+        res.locals.admin = admin;
+        next();
+      }
+    })
+  }
+  else {
+    res.locals.admin = null;
+    next();
+  }
+}
+
+module.exports = { 
+  requireAdmin, 
+  checkAdmin, 
+  verifyToken 
+};

@@ -4,10 +4,10 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const {StatusCodes} = require('http-status-codes');
 const activitiesRoutes = require('./routes/api/activitiesRoutes');
-const adminRoutes = require('./routes/api/adminRoutes');
+const adminRoutes = require('./routes/admin/adminRoutes');
 const serviceRoutes = require('./routes/api/servicesRoutes');
 const bookingRoutes = require('./routes/api/bookingRoutes');
-
+const { checkAdmin } = require('./middlewares/requireAuth');
 
 // .env variables
 const API_PORT = 4000
@@ -69,19 +69,13 @@ app.get('/', (req, res) => {
 })
 
 // admin auth routes
+// app.get('/admin/*', checkAdmin);
 app.use('/admin', adminRoutes);
 
 // api routes
 app.use(activitiesRoutes);
 app.use(serviceRoutes);
 app.use(bookingRoutes);
-
-// error handling middleware
-// app.use((req, res, next) => {
-//   const err = new Error('Not found');
-//   err.status = 404;
-//   next(err);
-// });
 
 app.use((req, res)=>{
   res.status(StatusCodes.NOT_FOUND).json({error: "Page Not Found"});
