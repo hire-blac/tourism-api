@@ -7,6 +7,7 @@ const activitiesRoutes = require('./routes/api/activitiesRoutes');
 const adminRoutes = require('./routes/admin/adminRoutes');
 const serviceRoutes = require('./routes/api/servicesRoutes');
 const bookingRoutes = require('./routes/api/bookingRoutes');
+const userRoutes = require('./routes/api/userRoutes');
 const { checkAdmin } = require('./middlewares/requireAuth');
 
 // .env variables
@@ -76,6 +77,7 @@ app.use('/admin', adminRoutes);
 app.use(activitiesRoutes);
 app.use(serviceRoutes);
 app.use(bookingRoutes);
+app.use('/api', userRoutes);
 
 app.use((req, res)=>{
   res.status(StatusCodes.NOT_FOUND).json({error: "Page Not Found"});

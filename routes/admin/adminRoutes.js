@@ -2,7 +2,6 @@ const { Router } = require('express');
 const cookieParser = require('cookie-parser');
 const authController = require('../../controllers/authController');
 const bookingControllers = require('../../controllers/bookingControllers');
-const userControllers = require('../../controllers/userControllers');
 const { requireAdmin, checkAdmin } = require('../../middlewares/requireAuth');
 const adminControllers = require('../../controllers/adminControllers')
 
@@ -36,9 +35,8 @@ router.get('/bookings', bookingControllers.allBookings);
 router.get('/bookings/:id', bookingControllers.getBooking);
 
 // user routes
-router.get('/users', userControllers.allUsers);
-router.get('/users/:id', userControllers.single_user);
-
+router.get('/users', adminControllers.allUsers);
+router.get('/users/:id', adminControllers.single_user);
 
 
 module.exports = router;
