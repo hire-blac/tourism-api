@@ -30,28 +30,16 @@ module.exports.get_createBooking = async (req, res) => {
 
 // create a new booking
 module.exports.createBooking = async (req, res)=>{
-  const {firstname, lastname, email, country, activityslug} = req.body;
-  const {numOfAdults, numOfChildren, amountPaid, date} = req.body;
+  // const {firstname, lastname, email, country, } = req.body;
+  const {activityslug, numOfAdults, numOfChildren, amountPaid, date} = req.body;
 
   try {
-    // check if user exists
-    let user = await  User.findOne({email});
-    if (!user) {
-      // save user info
-      user = await User.create({
-        firstname,
-        lastname,
-        email,
-        country
-      });
-    }
-
     // find activity
     const activity = await Activity.findOne({slug: activityslug});
 
     // save booking
     Booking.create({
-      user,
+      user: req.user,
       activity,
       numOfAdults,
       numOfChildren,

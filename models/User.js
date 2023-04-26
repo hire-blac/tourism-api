@@ -35,7 +35,7 @@ const userSchema = new Schema({
 // user instance methods
 userSchema.methods = {
   createToken() {
-    return jwt.sign({_id: this._id}, JWT_SECRET);
+    return jwt.sign({_id: this._id}, JWT_SECRET, {expiresIn: 60*60*24});
   },
   toAuthJSON() {
     return {

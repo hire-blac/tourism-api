@@ -1,29 +1,34 @@
 require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const Admin = require('../models/Admin');
+const { StatusCodes } = require('http-status-codes');
+const User = require('../models/User');
+
 
 const tokenKey = process.env.API_TOKEN_KEY;
 
-const verifyToken = (req, res, next) => {
+const verifyToken = async (req, res, next) => {
   
   if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[1]) {
     const token = req.headers.authorization.split(' ')[1];
-
-    try {
-      const verifiedToken = jwt.verify(token, apiTokenKey);
+    
+    // console.log(token);
+    const decodedToken = jwt.verify(token, tokenKey)
+    if (decodedToken) {
+      req.user = await User.findById(decodedToken);
       next();
-    } catch (error) {
-      return res.status(401).json({
-        message: "Authentication failed"
-      })
+    } else {
+      console.log(err.message);
+      res.status(StatusCodes.FORBIDDEN).json(err.message)
     }
 
   } else {
     res.status(403).send({
-      message: 'Authorization header is required'
+      message: 'Authorization Bearer Token header is required'
     })
   }
 }
+
 
 const requireAdmin = (req, res, next) => {
   const token = req.cookies.jwt;

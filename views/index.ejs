@@ -41,10 +41,44 @@
             <b>METHOD: </b> POST <br>
             <b>Endpoint: </b> <a href="/bookings/new">/bookings/new</a> <br>
             <b>Description: </b> Create a new Booking<br>
-            <b>Requirements: </b> firstname, lastname, email, country, numOfAdults, numOfChildren, activityslug, amountPaid, date<br>
+            <b>Requirements: </b> Request header { Authorization Bearer token} <br> Request Body { numOfAdults, numOfChildren, activityslug, amountPaid, date }<br>
           </p>
         </tr>
         <tr>
+          <p>
+            <b>METHOD: </b> POST <br>
+            <b>Endpoint: </b> <a href="/api/users/signup">/api/users/signup</a> <br>
+            <b>Description: </b> New user signup<br>
+            <b>Requirements: </b> Request Body { "firstname", "lastname", "email", "password" <b>OR</b> "credential" from Google auth login } <br>
+          </p>
+        </tr>
+        <tr>
+          <p>
+            <b>METHOD: </b> POST <br>
+            <b>Endpoint: </b> <a href="/api/users/login">/api/users/login</a> <br>
+            <b>Description: </b> User login<br>
+            <b>Requirements: </b> Request Body { "email", "password" <b>OR</b> "credential" from Google auth login } <br>
+          </p>
+        </tr>
+        <tr>
+          <p>
+            <b>METHOD: </b> GET <br>
+            <b>Endpoint: </b> <a href="/api/users/profile">/api/users/login</a> <br>
+            <b>Description: </b> User login<br>
+            <b>Requirements: </b> Request header { Authorization Bearer token } <br>
+          </p>
+        </tr>
+        <tr>
+          <p>
+            <b>METHOD: </b> GET <br>
+            <b>Endpoint: </b> <a href="/token-check">/token-check</a> <br>
+            <b>Description: </b> check if the current token is still valid<br>
+            <b>Requirements: </b> Request header { Authorization Bearer token } <br>
+          </p>
+        </tr>
+
+
+        <!-- <tr>
           <p>
             <b>METHOD: </b> POST <br>
             <b>Endpoint: </b> <a href="/admin/register">/admin/register</a> <br>
@@ -91,7 +125,7 @@
             <b>Description: </b> show details of a single user<br>
             <b>Requirements: </b> admin must be logged in (authorization Bearer header required)<br>
           </p>
-        </tr>
+        </tr> -->
       </tbody>
     </table>
 

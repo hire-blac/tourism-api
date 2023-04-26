@@ -61,3 +61,14 @@ module.exports.userLogin = async (req, res) => {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(err.message);
   }
 };
+
+// user profile
+module.exports.userProfile = async (req, res) => {
+  try {
+    const user = await User.findById(req.user);
+    res.status(StatusCodes.OK).json(user.toAuthJSON());
+  } catch (err) {
+    console.log(err.message);
+    res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(err.message);    
+  }
+}
