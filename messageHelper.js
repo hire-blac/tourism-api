@@ -1,5 +1,23 @@
+require('dotenv').config();
 const axios = require('axios');
+const nodemailer = require('nodemailer');
 
+const emailUser = process.env.EMAIL_USER;
+const emailPassword = process.env.EMAIL_PASSWORD;
+const emailHost = process.env.EMAIL_HOST;
+
+// nodemailer transportter to send email
+const transporter = nodemailer.createTransport({
+  host: emailHost,
+  secure: true,
+  port: 465,
+  auth: {
+    user: emailUser,
+    pass: emailPassword,
+  },
+});
+
+// function to send whatsapp message
 function sendMessage(data) {
   let config = {
     method: 'post',
@@ -29,5 +47,6 @@ function getTextMessageInput(recipient, text) {
 
 module.exports = {
   sendMessage,
-  getTextMessageInput
+  getTextMessageInput,
+  transporter
 };

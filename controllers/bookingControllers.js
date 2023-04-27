@@ -1,8 +1,18 @@
+require('dotenv').config();
 const Booking = require("../models/Bookings");
 const User = require("../models/User");
 const Activity = require("../models/activity");
-const { sendMessage, getTextMessageInput } = require("../messageHelper");
-require('dotenv').config();
+const { sendMessage, getTextMessageInput, transporter } = require("../messageHelper");
+
+const sender = process.env.SENDER;
+const recipients = process.env.RECIPIENTS;
+
+let mailOptions = {
+  from: sender, // sender address
+  to: recipients,
+  subject: "New Booking", // Subject line
+ };
+
 
 // list all bookings
 module.exports.allBookings = async (req, res) => {
@@ -47,14 +57,34 @@ module.exports.createBooking = async (req, res)=>{
       date
     }).then(booking => {
 
-      let message = `New Booking \n********************\nClient: ${user.firstname} ${user.lastname}\nActivity: ${activity.activityName}\nNum. of Adults: ${booking.numOfAdults}\nNum. of Children: ${booking.numOfChildren}\nDate: ${booking.date}`;
+      // set email content
+      mailOptions.html = `<h3>New Booking</h3>
+      <p>
+      <b>Client: </b>${req.user.firstname} ${req.user.lastname}<br>
+      <b>Activity: </b>${activity.activityName}<br>
+      <b>Num. of Adults: </b>${booking.numOfAdults}<br>
+      <b>Num. of Children: </b>${booking.numOfChildren}<br>
+      <b>Date: </b>${booking.date}
+      </p>`;
+
+      // set whatsapp message content
+      let message = `New Booking \n********************\nClient: ${req.user.firstname} ${req.user.lastname}\nActivity: ${activity.activityName}\nNum. of Adults: ${booking.numOfAdults}\nNum. of Children: ${booking.numOfChildren}\nDate: ${booking.date}`;
+
       // send email
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+
+      // send whataspp message
       let data = getTextMessageInput(process.env.RECIPIENT_WAID, message);
       
       sendMessage(data)
-      .then()
+      .then(() => console.log("WhatsApp message sent"))
       .catch(err=>{
-        console.log(err);
         console.log(err.response.data);
       });
   
