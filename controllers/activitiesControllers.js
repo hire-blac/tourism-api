@@ -98,6 +98,7 @@ module.exports.new_single_activity = async (req, res) => {
 module.exports.single_activity_post = async (req, res) => {
 
   const origin = req.headers.origin;
+  console.log(req.headers);
   const files = req.files;
   const images = await handleFiles(origin, files);
 

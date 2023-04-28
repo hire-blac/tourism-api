@@ -6,6 +6,8 @@ const router = Router()
 
 router.post('/users/signup', userControllers.userSignup);
 router.post('/users/login', userControllers.userLogin);
+router.get('/users/confirm/:confirmationCode', userControllers.confirmation);
+
 
 // user profile
 router.post('/users/profile', verifyToken, userControllers.userProfile);

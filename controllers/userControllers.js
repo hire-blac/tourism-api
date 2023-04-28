@@ -1,7 +1,19 @@
 const User = require("../models/User");
+const Bookings = require('../models/Bookings')
 const jwt_decode = require('jwt-decode');
+const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const { StatusCodes } = require("http-status-codes");
+const { transporter } = require("../messageHelper");
+
+const sender = process.env.SENDER;
+const JWT_SECRET = process.env.API_TOKEN_KEY;
+
+let mailOptions = {
+  from: sender, // sender address
+  subject: "Email Confirmation", // Subject line
+ };
+
 
 // function to handle Google login
 const googleLogin = async (credential) => {
@@ -29,13 +41,32 @@ module.exports.userSignup = async (req, res) => {
     else {
       const salt = await bcrypt.genSalt();
       const password = await bcrypt.hash(req.body.password, salt);
+      const emailConfirmationToken = jwt.sign({email: req.body.email}, JWT_SECRET);
 
       // Signup new user
       user = await User.create({
         firstname: req.body.firstname,
         lastname: req.body.lastname,
         email: req.body.email,
+        confirmationCode: emailConfirmationToken,
         password
+      });
+      const confirmationLink = `/api/users/confirm/${user.confirmationCode}`;
+      // set email content
+      mailOptions.to = user.email;
+      mailOptions.html = `<h1>Email Confirmation</h1>
+      <h2>Hello ${user.firstname}</h2>
+      <p>Thank you for signing up with Arabianlens. Please confirm your email by clicking on the following link</p>
+      <a href="api.arabianlens.com/api/users/confirm/${user.confirmationCode}"> Click here</a>
+      </div>`;
+
+      // send email
+      transporter.sendMail(mailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
       });
     }
     // return user
@@ -62,11 +93,29 @@ module.exports.userLogin = async (req, res) => {
   }
 };
 
+// email confirmation
+module.exports.confirmation = async (req, res) => {
+  try {
+    let user = User.findOne({confirmationCode: req.confirmationCode})
+    user.email_verified = true;
+    user.save();
+
+    res.status(StatusCodes.OK).render('emailVerified');
+  } catch (error) {
+    
+  }
+}
 // user profile
 module.exports.userProfile = async (req, res) => {
   try {
     const user = await User.findById(req.user);
-    res.status(StatusCodes.OK).json(user.toAuthJSON());
+    const bookings = await Bookings.find({user:user._id}).sort({createdAt: -1})
+
+    res.status(StatusCodes.OK).json({
+      user: user.toAuthJSON(),
+      bookings
+    });
+
   } catch (err) {
     console.log(err.message);
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(err.message);    

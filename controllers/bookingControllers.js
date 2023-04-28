@@ -7,9 +7,14 @@ const { sendMessage, getTextMessageInput, transporter } = require("../messageHel
 const sender = process.env.SENDER;
 const recipients = process.env.RECIPIENTS;
 
-let mailOptions = {
+let adminMailOptions = {
   from: sender, // sender address
   to: recipients,
+  subject: "New Booking", // Subject line
+ };
+
+let clientMailOptions = {
+  from: sender, // sender address
   subject: "New Booking", // Subject line
  };
 
@@ -40,16 +45,23 @@ module.exports.get_createBooking = async (req, res) => {
 
 // create a new booking
 module.exports.createBooking = async (req, res)=>{
-  // const {firstname, lastname, email, country, } = req.body;
+  const user= req.user;
   const {activityslug, numOfAdults, numOfChildren, amountPaid, date} = req.body;
 
   try {
     // find activity
     const activity = await Activity.findOne({slug: activityslug});
 
+    // check if user email is verified
+    // if (!user.email_verified) {
+    //   return res.status(401).send({
+    //     message: "Pending Account. Please Verify Your Email!",
+    //   });
+    // }
+
     // save booking
     Booking.create({
-      user: req.user,
+      user,
       activity,
       numOfAdults,
       numOfChildren,
@@ -58,20 +70,30 @@ module.exports.createBooking = async (req, res)=>{
     }).then(booking => {
 
       // set email content
-      mailOptions.html = `<h3>New Booking</h3>
+      adminMailOptions.html = `<h3>New Booking</h3>
       <p>
-      <b>Client: </b>${req.user.firstname} ${req.user.lastname}<br>
+      <b>Client: </b>${user.firstname} ${user.lastname}<br>
       <b>Activity: </b>${activity.activityName}<br>
       <b>Num. of Adults: </b>${booking.numOfAdults}<br>
       <b>Num. of Children: </b>${booking.numOfChildren}<br>
+      <b>Amount Pait: </b>${booking.amountPaid}<br>
       <b>Date: </b>${booking.date}
       </p>`;
 
-      // set whatsapp message content
-      let message = `New Booking \n********************\nClient: ${req.user.firstname} ${req.user.lastname}\nActivity: ${activity.activityName}\nNum. of Adults: ${booking.numOfAdults}\nNum. of Children: ${booking.numOfChildren}\nDate: ${booking.date}`;
+      // set email content
+      clientMailOptions.to = user.email;
+      clientMailOptions.html = `<h3>New Booking</h3>
+      <p>
+      <b>Client: </b>${user.firstname} ${user.lastname}<br>
+      <b>Activity: </b>${activity.activityName}<br>
+      <b>Num. of Adults: </b>${booking.numOfAdults}<br>
+      <b>Num. of Children: </b>${booking.numOfChildren}<br>
+      <b>Amount Pait: </b>${booking.amountPaid}<br>
+      <b>Date: </b>${booking.date}
+      </p>`;
 
       // send email
-      transporter.sendMail(mailOptions, function(error, info){
+      transporter.sendMail(adminMailOptions, function(error, info){
         if (error) {
           console.log(error);
         } else {
@@ -79,6 +101,17 @@ module.exports.createBooking = async (req, res)=>{
         }
       });
 
+      // send email
+      transporter.sendMail(clientMailOptions, function(error, info){
+        if (error) {
+          console.log(error);
+        } else {
+          console.log('Email sent: ' + info.response);
+        }
+      });
+
+      // set whatsapp message content
+      let message = `New Booking \n********************\nClient: ${user.firstname} ${user.lastname}\nActivity: ${activity.activityName}\nNum. of Adults: ${booking.numOfAdults}\nNum. of Children: ${booking.numOfChildren}\nDate: ${booking.date}`;
       // send whataspp message
       let data = getTextMessageInput(process.env.RECIPIENT_WAID, message);
       

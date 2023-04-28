@@ -27,6 +27,10 @@ const userSchema = new Schema({
   password: {
     type: String
   },
+  confirmationCode: { 
+    type: String, 
+    unique: true 
+  },
   country: {
     type: String,
   }
