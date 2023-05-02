@@ -68,9 +68,10 @@ const makeNewBooking = async (booking, user) => {
 
   const {activityslug, numOfAdults, numOfChildren, amountPaid, date, time} = booking;
 
-  const activity = await Activity.findOne({slug: activityslug});
-
   try {
+    // find activity
+    const activity = await Activity.findOne({slug: activityslug});
+    
     // create booking
     const newBooking = await Booking.create({
       user,
