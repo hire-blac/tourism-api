@@ -108,11 +108,11 @@ module.exports.confirmation = async (req, res) => {
 // user profile
 module.exports.userProfile = async (req, res) => {
   try {
-    const user = await User.findById(req.user);
-    const bookings = await Bookings.find({user:user._id}).sort({createdAt: -1})
+    const user = req.user;
+    const bookings = await Bookings.find({user:user._id}).populate('activity').sort({createdAt: -1})
 
     res.status(StatusCodes.OK).json({
-      user: user.toAuthJSON(),
+      user,
       bookings
     });
 
