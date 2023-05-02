@@ -48,6 +48,82 @@ module.exports.createBooking = async (req, res)=>{
   const user= req.user;
   const activities = req.body;
 
+  if (activities.length < 2) {
+    
+    const {activityslug, numOfAdults, numOfChildren, amountPaid, date} = activities;
+
+      const activity = await Activity.findOne({slug: activityslug});
+
+      // create booking
+      Booking.create({
+        user,
+        activity,
+        numOfAdults,
+        numOfChildren,
+        amountPaid,
+        date
+      }).then(booking => {
+  
+        // set admin email content
+        adminMailOptions.html = `<h3>New Booking</h3>
+        <p>
+        <b>Client: </b>${user.firstname} ${user.lastname}<br>
+        <b>Activity: </b>${activity.activityName}<br>
+        <b>Num. of Adults: </b>${booking.numOfAdults}<br>
+        <b>Num. of Children: </b>${booking.numOfChildren}<br>
+        <b>Amount Pait: </b>${booking.amountPaid}<br>
+        <b>Date: </b>${booking.date}
+        </p>`;
+  
+        // set client email content
+        clientMailOptions.to = user.email;
+        clientMailOptions.html = `<h3>New Booking</h3>
+        <p>
+        <b>Client: </b>${user.firstname} ${user.lastname}<br>
+        <b>Activity: </b>${activity.activityName}<br>
+        <b>Num. of Adults: </b>${booking.numOfAdults}<br>
+        <b>Num. of Children: </b>${booking.numOfChildren}<br>
+        <b>Amount Pait: </b>${booking.amountPaid}<br>
+        <b>Date: </b>${booking.date}
+        </p>`;
+  
+        // send admin email
+        transporter.sendMail(adminMailOptions, function(error, info){
+          if (error) {
+            console.log(error);
+          } else {
+            console.log('Email sent: ' + info.response);
+          }
+        });
+  
+        // send client email
+        transporter.sendMail(clientMailOptions, function(error, info){
+          if (error) {
+            console.log(error);
+          } else {
+            console.log('Email sent: ' + info.response);
+          }
+        });
+  
+        // set whatsapp message content
+        let message = `New Booking \n********************\nClient: ${user.firstname} ${user.lastname}\nActivity: ${activity.activityName}\nNum. of Adults: ${booking.numOfAdults}\nNum. of Children: ${booking.numOfChildren}\nDate: ${booking.date}`;
+        // send whataspp message
+        let data = getTextMessageInput(process.env.RECIPIENT_WAID, message);
+        
+        sendMessage(data)
+        .then(() => console.log("WhatsApp message sent"))
+        .catch(err=>{
+          console.log(err.response.data);
+        });
+    
+        res.json({booking});
+    
+      }).catch (err=>{
+        res.json(err)
+      });
+    
+  }
+
   try {
     // find activity
     for (const i of activities) {
