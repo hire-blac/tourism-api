@@ -129,8 +129,17 @@ module.exports.tokenCheck = (req, res) => {
     const token = req.headers.authorization.split(' ')[1];
     
     const decodedToken = jwt.verify(token, JWT_SECRET)
-    if (decodedToken) res.json({tokenValid: true})
-    else  res.json({tokenValid: false})
+    if (decodedToken) {
+      res.json({
+        tokenValid: true,
+        message: 'Authorization Bearer Token still valid'
+      })
+    } else {
+      res.json({
+        tokenValid: false,
+        message: 'Authorization Bearer Token not valid'
+      })
+    }
 
   } else {
     res.status(403).send({

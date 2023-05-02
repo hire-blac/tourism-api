@@ -46,11 +46,13 @@ module.exports.get_createBooking = async (req, res) => {
 // create a new booking
 module.exports.createBooking = async (req, res)=>{
   const user= req.user;
-  const {activities, numOfAdults, numOfChildren, amountPaid, date} = req.body;
+  const activities = req.body;
 
   try {
     // find activity
-    for (const activityslug of activities) {
+    for (const i of activities) {
+
+      const {activityslug, numOfAdults, numOfChildren, amountPaid, date} = i;
 
       const activity = await Activity.findOne({slug: activityslug});
 
