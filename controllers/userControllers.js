@@ -128,7 +128,7 @@ module.exports.tokenCheck = (req, res) => {
   if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[1]) {
     const token = req.headers.authorization.split(' ')[1];
     
-    const decodedToken = jwt.verify(token, tokenKey)
+    const decodedToken = jwt.verify(token, JWT_SECRET)
     if (decodedToken) res.json({tokenValid: true})
     else  res.json({tokenValid: false})
 
