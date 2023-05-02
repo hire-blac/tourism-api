@@ -17,13 +17,14 @@ const verifyToken = async (req, res, next) => {
     if (decodedToken) {
       req.user = await User.findById(decodedToken);
       next();
+      
     } else {
       console.log(err.message);
       res.status(StatusCodes.FORBIDDEN).json(err.message)
     }
 
   } else {
-    res.status(403).send({
+    res.status(StatusCodes.FORBIDDEN).send({
       message: 'Authorization Bearer Token header is required'
     })
   }

@@ -8,8 +8,10 @@ router.post('/users/signup', userControllers.userSignup);
 router.post('/users/login', userControllers.userLogin);
 router.get('/users/confirm/:confirmationCode', userControllers.confirmation);
 
-
 // user profile
 router.get('/users/profile', verifyToken, userControllers.userProfile);
+
+// check token
+router.get('/users/token-check', userControllers.tokenCheck);
 
 module.exports = router;

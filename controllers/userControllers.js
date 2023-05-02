@@ -121,3 +121,20 @@ module.exports.userProfile = async (req, res) => {
     res.status(StatusCodes.INTERNAL_SERVER_ERROR).json(err.message);    
   }
 }
+
+  // check token
+module.exports.tokenCheck = (req, res) => {
+  
+  if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[1]) {
+    const token = req.headers.authorization.split(' ')[1];
+    
+    const decodedToken = jwt.verify(token, tokenKey)
+    if (decodedToken) res.json({tokenValid: true})
+    else  res.json({tokenValid: false})
+
+  } else {
+    res.status(403).send({
+      message: 'Authorization Bearer Token header is required'
+    })
+  }
+}

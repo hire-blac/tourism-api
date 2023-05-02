@@ -70,24 +70,6 @@ app.get('/', (req, res) => {
   res.render('index');
 })
 
-// unauthorized routes
-app.get('/token-check', (req, res) => {
-  
-  if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[1]) {
-    const token = req.headers.authorization.split(' ')[1];
-    
-    // console.log(token);
-    const decodedToken = jwt.verify(token, tokenKey)
-    if (decodedToken) res.json({tokenValid: true})
-    else  res.json({tokenValid: false})
-
-  } else {
-    res.status(403).send({
-      message: 'Authorization Bearer Token header is required'
-    })
-  }
-})
-
 // admin auth routes
 // app.get('/admin/*', checkAdmin);
 app.use('/admin', adminRoutes);
