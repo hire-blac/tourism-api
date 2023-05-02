@@ -69,6 +69,7 @@ app.use(express.static('public'));
 app.get('/', (req, res) => {
   res.render('index');
 })
+
 // unauthorized routes
 app.get('/token-check', (req, res) => {
   

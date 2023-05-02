@@ -10,6 +10,6 @@ router.get('/users/confirm/:confirmationCode', userControllers.confirmation);
 
 
 // user profile
-router.post('/users/profile', verifyToken, userControllers.userProfile);
+router.get('/users/profile', verifyToken, userControllers.userProfile);
 
 module.exports = router;
