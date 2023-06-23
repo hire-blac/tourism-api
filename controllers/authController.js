@@ -89,11 +89,17 @@ module.exports.login = async (req, res) => {
     const admin = await Admin.login(email, password);
     const token = createToken(admin._id);
 
-    res.cookie('jwt', token, {
-      httpOnly: true,
-      maxAge: maxAge * 1000
+    // res.cookie('jwt', token, {
+    //   httpOnly: true,
+    //   maxAge: maxAge * 1000
+    // })
+    res.json({
+      firstname: admin.firstname,
+      lastname: admin.lastname,
+      email: admin.email,
+      token: token
     })
-    res.redirect('/admin');
+    // res.redirect('/admin');
   } 
   catch (err) {
     // console.log(err);

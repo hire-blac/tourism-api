@@ -32,22 +32,26 @@ const verifyToken = async (req, res, next) => {
 
 
 const requireAdmin = (req, res, next) => {
-  const token = req.cookies.jwt;
-
-  // check if jwt exists and verify
-  if(token) {
-    jwt.verify(token, tokenKey, (err, decodedToken) => {
-      if(err) {
-        console.log(err.message);
-        res.redirect('/admin/login');
-      }
-      else {
-        next();
-      }
-    })
-  }
-  else {
-    res.redirect('/admin/login');
+  if (req.headers && req.headers.authorization && req.headers.authorization.split(' ')[1]) {
+    const token = req.headers.authorization.split(' ')[1];
+    // check if jwt exists and verify
+    if(token) {
+      jwt.verify(token, tokenKey, (err, decodedToken) => {
+        if(err) {
+          // console.log(err.message);
+          // res.redirect('/admin/login');
+          console.log(err.message);
+          res.status(StatusCodes.FORBIDDEN).json(err.message)
+        }
+        else {
+          next();
+        }
+      })
+    } else {
+      res.status(StatusCodes.FORBIDDEN).send({
+        message: 'Authorization Bearer Token header is required'
+      })
+    }
   }
 }
 
