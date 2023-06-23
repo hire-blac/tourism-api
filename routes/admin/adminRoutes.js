@@ -13,7 +13,7 @@ const authMiddleware = [requireAdmin, checkAdmin];
 
 router.get('/', authMiddleware, authController.admin_home);
 
-router.route('/register')
+router.route('/v1/register')
   .get(checkAdmin, authController.register_get)
   .post(authController.register);
 
