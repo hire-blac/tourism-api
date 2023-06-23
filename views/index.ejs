@@ -93,12 +93,20 @@
             <b>Description: </b> Admin user login<br>
             <b>Requirements: </b> email, password<br>
           </p>
-        </tr>
+        </tr> -->
         <tr>
           <p>
             <b>METHOD: </b> GET <br>
             <b>Endpoint: </b> <a href="/admin/bookings">/admin/bookings</a> <br>
             <b>Description: </b> show list of all bookings made<br>
+            <b>Requirements: </b> admin must be logged in (authorization Bearer header required)<br>
+          </p>
+        </tr>
+        <tr>
+          <p>
+            <b>METHOD: </b> GET <br>
+            <b>Endpoint: </b> <a href="/admin/bookings/completed">/admin/bookings/completed</a> <br>
+            <b>Description: </b> show all completed bookings<br>
             <b>Requirements: </b> admin must be logged in (authorization Bearer header required)<br>
           </p>
         </tr>
@@ -111,6 +119,15 @@
           </p>
         </tr>
         <tr>
+          <p>
+            <b>METHOD: </b> POST <br>
+            <b>Endpoint: </b> <a href="/admin/bookings/12">/admin/bookings/:[booking_id]</a> <br>
+            <b>Description: </b> set the status of a booking to completed<br>
+            <b>Body: </b> {id = booking-id, completed = true}<br>
+            <b>Requirements: </b> admin must be logged in (authorization Bearer header required)<br>
+          </p>
+        </tr>
+        <!-- <tr>
           <p>
             <b>METHOD: </b> GET <br>
             <b>Endpoint: </b> <a href="/admin/users">/admin/users</a> <br>

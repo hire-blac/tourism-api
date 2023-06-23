@@ -31,8 +31,12 @@ router.route('/services')
 router.get('/services/:slug', adminControllers.service_get);// get a single service
 
 // booking routes
-router.get('/bookings', bookingControllers.allBookings);
-router.get('/bookings/:id', bookingControllers.getBooking);
+router.get('/bookings', requireAdmin, bookingControllers.allBookings);
+router.get('/bookings/completed', requireAdmin, bookingControllers.get_completed);
+
+router.route('/bookings/:id', requireAdmin) 
+  .get(bookingControllers.getBooking)
+  .post(bookingControllers.booking_set_completed);
 
 // user routes
 router.get('/users', adminControllers.allUsers);

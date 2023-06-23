@@ -29,6 +29,10 @@ const bookingSchema = new Schema({
   date: {
     type: String
   },
+  completed: {
+    type: Boolean,
+    default: false
+  },
   time: {
     type: String
   }

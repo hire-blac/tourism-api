@@ -105,11 +105,39 @@ module.exports.allBookings = async (req, res) => {
 
 // get single booking
 module.exports.getBooking = async (req, res) => {
-  Booking.find().populate('user')
+  Booking.findById(req.params.id).populate('user').populate('activity')
   .then(booking => {
     res.json(booking)
   })
-  .catch(err => res.json(err));
+  .catch(err => res.json({message: err.message}));
+}
+
+// mark booking as completed
+module.exports.booking_set_completed = async (req, res) => {
+  // find booking
+  const booking = await Booking.findById(req.body.id);
+  // set booking.completed = true
+  booking.completed = req.body.completed;
+  // save booking
+  booking.save()
+  .then(result => {
+    res.json({
+      result,
+      message: "Booking completed",
+    })
+  })
+  .catch(err => res.json({message: err.message}))
+}
+
+// get all completed bookings
+module.exports.get_completed = async (req, res) => {
+  try {
+    const bookings = await Booking.find({completed:true})
+    res.status(StatusCodes.OK).json(bookings)
+  } catch (error) {
+    res.json({message: error.message})
+  }
+
 }
 
 // create booking
